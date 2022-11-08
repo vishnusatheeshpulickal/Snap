@@ -9,9 +9,9 @@ const Sidebar = ({ user, closeToggle }) => {
     if (closeToggle) closeToggle(false);
   };
   const isNotActiveStyle =
-    "flex item-center px-5 gap-3 text-gray-500 hover:text-black transition-all duration-200 ease-in-out capitalize";
+    "flex items-center px-5 gap-3 text-gray-500 hover:text-black transition-all duration-200 ease-in-out capitalize";
   const isActiveStyle =
-    "flex item-center px-5 gap-3 font-extrabold border-r-2 border-black transition-all duration-200 ease-in-out capitalize";
+    "flex items-center px-5 gap-3 font-extrabold border-r-2 border-black transition-all duration-200 ease-in-out capitalize";
 
   const categories = [
     { name: "Animals" },
