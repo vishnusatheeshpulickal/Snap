@@ -10,6 +10,13 @@ const data = [
     category: "coding",
     image:
       "https://images.pexels.com/photos/5496463/pexels-photo-5496463.jpeg?auto=compress&cs=tinysrgb&w=600",
+    destination: "image url",
+    postedBy: {
+      _id: "user127",
+      userName: "Maria",
+      imageUrl:
+        "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8cGVyc29uYXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+    },
   },
   {
     title: "Sample 2",
@@ -17,6 +24,11 @@ const data = [
     category: "coding",
     image:
       "https://images.pexels.com/photos/9553909/pexels-photo-9553909.jpeg?auto=compress&cs=tinysrgb&w=600",
+    postedBy: {
+      userName: "vishnu",
+      _id: "user123",
+      imageUrl: "https://avatars.githubusercontent.com/u/70451086?v=4",
+    },
   },
   {
     title: "Sample 3",
@@ -24,6 +36,12 @@ const data = [
     category: "coding",
     image:
       "https://images.pexels.com/photos/7988087/pexels-photo-7988087.jpeg?auto=compress&cs=tinysrgb&w=600",
+    postedBy: {
+      _id: "user125",
+      userName: "John",
+      imageUrl:
+        "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVyc29uYXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+    },
   },
   {
     title: "Sample 4",
@@ -31,6 +49,11 @@ const data = [
     category: "coding",
     image:
       "https://images.pexels.com/photos/7172094/pexels-photo-7172094.jpeg?auto=compress&cs=tinysrgb&w=600",
+    postedBy: {
+      _id: "user123",
+      userName: "vishnu",
+      imageUrl: "https://avatars.githubusercontent.com/u/70451086?v=4",
+    },
   },
   {
     title: "Sample 5",
@@ -38,6 +61,12 @@ const data = [
     category: "coding",
     image:
       "https://images.pexels.com/photos/9553909/pexels-photo-9553909.jpeg?auto=compress&cs=tinysrgb&w=600",
+    postedBy: {
+      _id: "user125",
+      userName: "John",
+      imageUrl:
+        "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVyc29uYXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+    },
   },
   {
     title: "Sample 6",
@@ -45,6 +74,12 @@ const data = [
     category: "coding",
     image:
       "https://images.pexels.com/photos/5473952/pexels-photo-5473952.jpeg?auto=compress&cs=tinysrgb&w=600",
+    postedBy: {
+      _id: "user127",
+      userName: "Maria",
+      imageUrl:
+        "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8cGVyc29uYXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+    },
   },
   {
     title: "Sample 7",
@@ -52,6 +87,12 @@ const data = [
     category: "coding",
     image:
       "https://images.pexels.com/photos/1181359/pexels-photo-1181359.jpeg?auto=compress&cs=tinysrgb&w=600",
+    postedBy: {
+      _id: "user127",
+      userName: "Maria",
+      imageUrl:
+        "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8cGVyc29uYXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+    },
   },
   {
     title: "Sample 8",
@@ -59,6 +100,12 @@ const data = [
     category: "coding",
     image:
       "https://images.pexels.com/photos/5496463/pexels-photo-5496463.jpeg?auto=compress&cs=tinysrgb&w=600",
+    postedBy: {
+      _id: "user125",
+      userName: "John",
+      imageUrl:
+        "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVyc29uYXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+    },
   },
   {
     title: "Sample 9",
@@ -66,6 +113,12 @@ const data = [
     category: "coding",
     image:
       "https://images.pexels.com/photos/1181359/pexels-photo-1181359.jpeg?auto=compress&cs=tinysrgb&w=600",
+    postedBy: {
+      _id: "user127",
+      userName: "Maria",
+      imageUrl:
+        "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8cGVyc29uYXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+    },
   },
   {
     title: "Sample 10",
@@ -73,6 +126,12 @@ const data = [
     category: "coding",
     image:
       "https://images.pexels.com/photos/9553909/pexels-photo-9553909.jpeg?auto=compress&cs=tinysrgb&w=600",
+    postedBy: {
+      _id: "user127",
+      userName: "Maria",
+      imageUrl:
+        "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8cGVyc29uYXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+    },
   },
 ];
 
