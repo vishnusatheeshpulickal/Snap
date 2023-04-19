@@ -5,6 +5,7 @@ import Spinner from "./Spinner";
 
 const data = [
   {
+    _id: "123445",
     title: "Sample 1",
     about: "sample about",
     category: "coding",
@@ -19,6 +20,7 @@ const data = [
     },
   },
   {
+    _id: "123455",
     title: "Sample 2",
     about: "sample about",
     category: "coding",
@@ -31,6 +33,7 @@ const data = [
     },
   },
   {
+    _id: "133445",
     title: "Sample 3",
     about: "sample about",
     category: "coding",
@@ -44,6 +47,7 @@ const data = [
     },
   },
   {
+    _id: "123445",
     title: "Sample 4",
     about: "sample about",
     category: "coding",
@@ -56,6 +60,7 @@ const data = [
     },
   },
   {
+    _id: "183445",
     title: "Sample 5",
     about: "sample about",
     category: "coding",
@@ -69,6 +74,7 @@ const data = [
     },
   },
   {
+    _id: "823445",
     title: "Sample 6",
     about: "sample about",
     category: "coding",
@@ -82,6 +88,7 @@ const data = [
     },
   },
   {
+    _id: "623445",
     title: "Sample 7",
     about: "sample about",
     category: "coding",
@@ -95,6 +102,7 @@ const data = [
     },
   },
   {
+    _id: "323445",
     title: "Sample 8",
     about: "sample about",
     category: "coding",
@@ -108,6 +116,7 @@ const data = [
     },
   },
   {
+    _id: "723445",
     title: "Sample 9",
     about: "sample about",
     category: "coding",
@@ -121,6 +130,7 @@ const data = [
     },
   },
   {
+    _id: "553445",
     title: "Sample 10",
     about: "sample about",
     category: "coding",

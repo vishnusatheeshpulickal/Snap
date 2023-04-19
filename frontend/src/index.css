@@ -9,3 +9,11 @@ body {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.box {
+  border-radius: 2rem;
+}
+
+.border-t-10 {
+  border-top-width: 10px;
+}
