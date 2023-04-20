@@ -1,86 +1,103 @@
 import React from "react";
+import { logo } from "../assets";
 
 const Register = () => {
   return (
-    <div class='signup-1 flex items-center relative h-screen'>
-      <div class='overlay absolute inset-0 z-0 bg-black opacity-75'></div>
-      <div class='container px-4 mx-auto relative z-10'>
-        <div class='sm:w-10/12 md:w-8/12 lg:w-6/12 xl:w-5/12 mx-auto'>
-          <div class='box bg-white p-6 md:px-12 md:pt-12 border-t-10 border-solid border-indigo-600'>
-            <h2 class='text-3xl text-gray-800 text-center'>
-              Create Your Account
-            </h2>
-
-            <div class='signup-form mt-6 md:mt-12'>
-              <div class='border-2 border-solid rounded flex items-center mb-4'>
-                <div class='w-10 h-10 flex justify-center items-center flex-shrink-0'>
-                  <span class='far fa-user text-gray-500'></span>
-                </div>
-                <div class='flex-1'>
-                  <input
-                    type='text'
-                    placeholder='Username'
-                    class='h-10 py-1 pr-3 w-full'
-                  />
-                </div>
-              </div>
-
-              <div class='border-2 border-solid rounded flex items-center mb-4'>
-                <div class='w-10 h-10 flex justify-center items-center flex-shrink-0'>
-                  <span class='far fa-envelope text-gray-500'></span>
-                </div>
-                <div class='flex-1'>
-                  <input
-                    type='text'
-                    placeholder='E-mail'
-                    class='h-10 py-1 pr-3 w-full'
-                  />
-                </div>
-              </div>
-
-              <div class='border-2 border-solid rounded flex items-center mb-4'>
-                <div class='w-10 h-10 flex justify-center items-center flex-shrink-0'>
-                  <span class='fas fa-asterisk text-gray-500'></span>
-                </div>
-                <div class='flex-1'>
-                  <input
-                    type='password'
-                    placeholder='Password'
-                    class='h-10 py-1 pr-3 w-full'
-                  />
-                </div>
-              </div>
-
-              <p class='text-sm text-center mt-6'>
-                By signing up, you agree to our{" "}
-                <a href='#' class='text-indigo-600 hover:underline'>
-                  Terms
-                </a>{" "}
-                and{" "}
-                <a href='#' class='text-indigo-600 hover:underline'>
-                  Privacy Policy
-                </a>
-              </p>
-
-              <div class='text-center mt-6 md:mt-12'>
-                <button class='bg-indigo-600 hover:bg-indigo-700 text-white text-xl py-2 px-4 md:px-6 rounded transition-colors duration-300'>
-                  Sign Up <span class='far fa-paper-plane ml-2'></span>
-                </button>
-              </div>
-            </div>
-
-            <div class='border-t border-solid mt-6 md:mt-12 pt-4'>
-              <p class='text-gray-500 text-center'>
-                Already have an account,{" "}
-                <a href='#' class='text-indigo-600 hover:underline'>
-                  Sign In
-                </a>
-              </p>
-            </div>
-          </div>
+    <section className='min-h-screen flex items-stretch text-white '>
+      <div
+        className='lg:flex w-1/2 hidden bg-gray-500 bg-no-repeat bg-cover relative items-center'
+        style={{
+          backgroundImage: `url("https://images.unsplash.com/photo-1577495508048-b635879837f1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=675&q=80")`,
+        }}
+      >
+        <div className='absolute bg-black opacity-60 inset-0 z-0'></div>
+        <div className='w-full px-24 z-10'>
+          <h1 className='text-5xl font-bold text-left tracking-wide'>
+            Keep it special
+          </h1>
+          <p className='text-3xl my-4'>
+            Capture your personal memory in unique way, anywhere.
+          </p>
+        </div>
+        <div className='bottom-0 absolute p-4 text-center right-0 left-0 flex justify-center space-x-4'>
+          {/*                social media icons  */}
         </div>
       </div>
-    </div>
+      <div
+        className='lg:w-1/2 w-full flex items-center justify-center text-center md:px-16 px-0 z-0'
+        style={{ backgroundColor: "#161616" }}
+      >
+        <div
+          className='absolute lg:hidden z-10 inset-0 bg-gray-500 bg-no-repeat bg-cover items-center'
+          style={{
+            backgroundImage: `url("https://images.unsplash.com/photo-1577495508048-b635879837f1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=675&q=80")`,
+          }}
+        >
+          <div className='absolute bg-black opacity-60 inset-0 z-0'></div>
+        </div>
+        <div className='w-full py-6 z-20'>
+          <h1 class='my-6'>
+            <div class='flex justify-center items-center'>
+              <img src={logo} alt='logo' class='w-40 h-auto' />
+            </div>
+          </h1>
+          <div className='py-6 space-x-2'>
+            <span className='w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white'>
+              f
+            </span>
+            <span className='w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white'>
+              G+
+            </span>
+            <span className='w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white'>
+              in
+            </span>
+          </div>
+          <p className='text-gray-100'>or use email your account</p>
+          <form action='' className='sm:w-2/3 w-full px-4 lg:px-0 mx-auto'>
+            <div class='pb-2 pt-4'>
+              <input
+                className='block w-full p-4 text-lg rounded-sm bg-black'
+                type='text'
+                name='name'
+                id='name'
+                placeholder='Name'
+              />
+            </div>
+
+            <div className='pb-2 pt-4'>
+              <input
+                type='email'
+                name='email'
+                id='email'
+                placeholder='Email'
+                className='block w-full p-4 text-lg rounded-sm bg-black'
+              />
+            </div>
+            <div class='pb-2 pt-4'>
+              <input
+                className='block w-full p-4 text-lg rounded-sm bg-black'
+                type='password'
+                name='password'
+                id='password'
+                placeholder='Password'
+              />
+            </div>
+            <div className='text-right text-gray-400 hover:text-gray-100'>
+              Already have an account?{" "}
+              <a href='/login' class='hover:underline'>
+                {" "}
+                sign in
+              </a>
+            </div>
+            <div className='px-4 pb-2 pt-4'>
+              <button className='uppercase block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none'>
+                sign up
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
   );
 };
 
