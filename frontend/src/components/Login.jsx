@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import { facebookAuth } from "../config";
 import { logo } from "../assets";
 
 const Login = () => {
-  const [showfbLogin, setShowfbLogin] = useState(false);
   const responseFacebook = (response) => {
     console.log(response);
   };
+
+  console.log(facebookAuth.clientId);
   return (
     <section className='min-h-screen flex items-stretch text-white '>
       <div
@@ -48,7 +50,7 @@ const Login = () => {
           </h1>
           <div className='py-6 space-x-2'>
             <FacebookLogin
-              appId='171626858775232'
+              appId={facebookAuth.clientId}
               fields='name,email,picture'
               callback={responseFacebook}
               render={(renderProps) => (

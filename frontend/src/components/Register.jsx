@@ -1,7 +1,75 @@
-import React from "react";
+import React, { useState } from "react";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import { useGoogleLogin } from "@react-oauth/google";
+import { Link, useNavigate } from "react-router-dom";
+import { signup } from "../auth/auth";
+
+import { facebookAuth } from "../config";
+import axios from "axios";
 import { logo } from "../assets";
 
 const Register = () => {
+  const [googleData, setGoogleData] = useState([]);
+  const [googleProfileData, setGoogleProfileData] = useState([]);
+
+  const navigate = useNavigate();
+
+  const responseFacebook = (response) => {
+    const registerdata = {
+      registerType: "facebook",
+      name: response.name,
+      email: response.email,
+      userId: response.userID,
+      accessToken: response.accessToken,
+      profilePic: response.picture.data.url,
+    };
+    signup(registerdata)
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          navigate("/");
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      setGoogleData(tokenResponse);
+      if (googleData.access_token) {
+        getProfile();
+      }
+    },
+    onError: (err) => console.log(err),
+  });
+
+  const getProfile = () => {
+    axios
+      .get(
+        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${googleData.access_token}`,
+        {
+          headers: {
+            Authorization: `Bearer ${googleData.access_token}`,
+            Accept: "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        setGoogleProfileData(res.data);
+        if (googleProfileData.data) {
+          const registerData = {
+            registerType: "google",
+            name: googleProfileData.name,
+            email: googleProfileData.email,
+            userId: googleProfileData.id,
+            accessToken: googleData.access_token,
+            profilePic: googleProfileData.picture,
+          };
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <section className='min-h-screen flex items-stretch text-white '>
       <div
@@ -42,14 +110,27 @@ const Register = () => {
             </div>
           </h1>
           <div className='py-6 space-x-2'>
-            <span className='w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white'>
-              f
-            </span>
-            <span className='w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white'>
-              G+
-            </span>
-            <span className='w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white'>
-              in
+            <FacebookLogin
+              appId={facebookAuth.clientId}
+              fields='name,email,picture'
+              callback={responseFacebook}
+              render={(renderProps) => (
+                <span
+                  onClick={renderProps.onClick}
+                  className='w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white cursor-pointer'
+                >
+                  <i
+                    class='fa-brands fa-facebook-f'
+                    style={{ color: "#ffffff" }}
+                  ></i>
+                </span>
+              )}
+            />
+            <span
+              className='w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white cursor-pointer'
+              onClick={() => googleLogin()}
+            >
+              <i class='fa-brands fa-google' style={{ color: "#ffffff" }}></i>
             </span>
           </div>
           <p className='text-gray-100'>or use email your account</p>
