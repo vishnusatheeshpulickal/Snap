@@ -11,10 +11,6 @@ import Pins from "../container/Pins";
 
 const Home = () => {
   const [user, setuser] = useState([]);
-  // const user = {
-  //   _id: "user123",
-  //   image: "https://avatars.githubusercontent.com/u/70451086?v=4",
-  // };
   const [toggleSidebar, setToggleSidebar] = useState(false);
   const scrollRef = useRef(null);
 

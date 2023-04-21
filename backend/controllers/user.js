@@ -47,4 +47,15 @@ const user = async (req, res) => {
   });
 };
 
-module.exports = { register, login, user };
+const viewUser = async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user)
+    return res.status(404).send({ success: false, message: "User not found!" });
+  res.status(200).send({
+    success: true,
+    message: "successfully fetched the data",
+    data: user,
+  });
+};
+
+module.exports = { register, login, user, viewUser };
