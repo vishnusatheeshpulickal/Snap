@@ -5,6 +5,7 @@ import axios from "axios";
 
 import MasonryLayout from "./MasonryLayout";
 import Spinner from "./Spinner";
+import { getToken } from "../auth/auth";
 
 const randomImage =
   "https://source.unsplash.com/1600x900/?nature,photography,technology";
@@ -24,8 +25,12 @@ const UserProfile = () => {
   const { userId } = useParams();
 
   useEffect(() => {
+    const token = getToken();
+    const config = {
+      headers: { Authorization: token },
+    };
     axios
-      .get(`http://localhost:3100/api/v1/user/viewuser/${userId}`)
+      .get(`http://localhost:3100/api/v1/user/viewuser/${userId}`, config)
       .then((res) => {
         console.log(res);
         setUser(res.data.data);
@@ -63,8 +68,9 @@ const UserProfile = () => {
             <h1 className='font-bold text-3xl text-center mt-3'>{user.name}</h1>
             <div className='absolute top-0 z-1 right-0 p-2'>
               {userId === user._id && (
-                // logout class -> bg-white p-2 rounded-full cursor-pointer outline-none shadow-md
-                <AiOutlineLogout color='red' fontSize={21} />
+                <div className='bg-white p-2 rounded-full cursor-pointer outline-none shadow-md'>
+                  <AiOutlineLogout color='red' fontSize={21} />
+                </div>
               )}
             </div>
           </div>

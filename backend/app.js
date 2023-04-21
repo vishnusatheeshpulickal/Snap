@@ -9,9 +9,11 @@ app.use(express.json({ limit: "25mb" }));
 
 const commonRoutes = require("./routes/common");
 const userRoutes = require("./routes/user");
+// const uploadRoutes = require("./routes/upload");
 
 app.use(`${process.env.BASEURL}/`, commonRoutes);
 app.use(`${process.env.BASEURL}/user`, userRoutes);
+// app.use(`${process.env.BASEURL}/upload`, uploadRoutes);
 
 const port = process.env.PORT || 3100;
 app.listen(port, () => console.log(`Listening port ${port}`));

@@ -3,6 +3,9 @@ import { AiOutlineCloudUpload } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import Spinner from "./Spinner";
+import axios from "axios";
+
+import { getToken } from "../auth/auth";
 
 const CreatePin = ({ user }) => {
   const categoryData = ["Coding", "Vehicles", "Animals", "Gaming"];
@@ -18,6 +21,10 @@ const CreatePin = ({ user }) => {
   const [wrongImageType, setWrongImageType] = useState(false);
 
   const uploadImage = (e) => {
+    const token = getToken();
+    const config = {
+      headers: { Authorization: token },
+    };
     const { type } = e.target.files[0];
     if (
       type === "image/png" ||
@@ -28,21 +35,57 @@ const CreatePin = ({ user }) => {
     ) {
       setWrongImageType(false);
       setLoading(true);
-
-      // uploading logics
+      const formData = new FormData();
+      formData.append("image", e.target.files[0]);
+      axios
+        .post("http://localhost:3100/api/v1/user/uploadimage", formData, config)
+        .then((res) => {
+          setLoading(false);
+          setImageAsset(res.data.picture);
+        })
+        .catch((err) => console.log(err));
     } else {
       setWrongImageType(true);
     }
   };
 
+  const deleteUploaded = () => {
+    const token = getToken();
+    const config = {
+      headers: { Authorization: token },
+    };
+    axios
+      .post(
+        "http://localhost:3100/api/v1/user/deleteuploaded",
+        { url: imageAsset },
+        config
+      )
+      .then((res) => {
+        console.log(res);
+        setImageAsset(null);
+      })
+      .catch((err) => console.log(err));
+  };
+
   const savePin = () => {
-    if (title && about && destination && imageAsset?._id && category) {
-      // logic of save post
-      const doc = {
+    const token = getToken();
+    const config = {
+      headers: { Authorization: token },
+    };
+    if (title && about && destination && imageAsset && category) {
+      const data = {
         title,
         about,
-        destination,
+        category,
+        image: imageAsset,
       };
+
+      axios
+        .post("http://localhost:3100/api/v1/user/newpin", data, config)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => console.log(err));
     }
   };
 
@@ -73,7 +116,7 @@ const CreatePin = ({ user }) => {
                 </div>
                 <input
                   type='file'
-                  name='upload-image'
+                  name='image'
                   onChange={uploadImage}
                   className='w-0 h-0'
                 />
@@ -81,14 +124,14 @@ const CreatePin = ({ user }) => {
             ) : (
               <div className='relative h-full'>
                 <img
-                  src={imageAsset?.url}
+                  src={imageAsset ? imageAsset : null}
                   alt='uploaded-pic'
                   className='h-full w-full'
                 />
                 <button
                   type='button'
                   className='absolute bottom-3 right-3 p-3 rounded-full bg-white text-xl cursor-pointer outline-none hover:shadow-md transition-all duration-500 ease-in-out'
-                  onClick={() => setImageAsset(null)}
+                  onClick={deleteUploaded}
                 >
                   <MdDelete />
                 </button>

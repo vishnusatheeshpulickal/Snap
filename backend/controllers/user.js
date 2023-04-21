@@ -1,6 +1,8 @@
 const User = require("../Models/User");
+const Post = require("../Models/Post");
 const generateToken = require("../utils/generateToken");
 const { hashPassword } = require("../utils/hashPassword");
+const { destroy } = require("../utils/cloudinaryConfig");
 
 const register = async (req, res) => {
   const user = await new User({
@@ -58,4 +60,46 @@ const viewUser = async (req, res) => {
   });
 };
 
-module.exports = { register, login, user, viewUser };
+const post = async (req, res) => {
+  const post = new Post({
+    title: req.body.title,
+    about: req.body.about,
+    category: req.body.category,
+    image: req.body.imageAsset,
+    postedBy: req.user._id,
+  });
+  if (!post)
+    return res
+      .status(500)
+      .send({ success: false, message: "Failed to save pin!" });
+  res
+    .status(200)
+    .send({ success: true, message: "Successfully saved the pin" });
+};
+
+const uploadImage = (req, res) => {
+  res.json({ picture: req.file.path });
+};
+
+const deleteUploaded = async (req, res) => {
+  try {
+    const url = req.body.url;
+    await destroy(url);
+    res
+      .status(200)
+      .send({ success: true, message: "Image deleted successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ success: false, message: "Server Error" });
+  }
+};
+
+module.exports = {
+  register,
+  login,
+  user,
+  viewUser,
+  uploadImage,
+  deleteUploaded,
+  post,
+};
