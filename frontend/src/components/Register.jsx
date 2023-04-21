@@ -9,8 +9,9 @@ import axios from "axios";
 import { logo } from "../assets";
 
 const Register = () => {
-  const [googleData, setGoogleData] = useState([]);
-  const [googleProfileData, setGoogleProfileData] = useState([]);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
 
@@ -33,38 +34,105 @@ const Register = () => {
       .catch((err) => console.log(err));
   };
 
+  //   const googleLogin = useGoogleLogin({
+  //     onSuccess: (tokenResponse) => {
+  //       setGoogleData(tokenResponse);
+  //       console.log(tokenResponse);
+  //       if (googleData.access_token) {
+  //         getProfile();
+  //         console.log("entered");
+  //       }
+  //     },
+  //     onError: (err) => console.log(err),
+  //   });
+
+  //   const getProfile = () => {
+  //     axios
+  //       .get(
+  //         `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${googleData.access_token}`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${googleData.access_token}`,
+  //             Accept: "application/json",
+  //           },
+  //         }
+  //       )
+  //       .then((res) => {
+  //         setGoogleProfileData(res.data);
+  //         console.log(res.data);
+  //         if (googleProfileData.data) {
+  //           const registerData = {
+  //             registerType: "google",
+  //             name: googleProfileData.name,
+  //             email: googleProfileData.email,
+  //             userId: googleProfileData.id,
+  //             accessToken: googleData.access_token,
+  //             profilePic: googleProfileData.picture,
+  //           };
+  //           signup(registerData)
+  //             .then((res) => {
+  //               console.log(res);
+  //               if (res.status === 200) {
+  //                 navigate("/");
+  //               }
+  //             })
+  //             .catch((err) => console.log(err));
+  //         }
+  //       })
+  //       .catch((err) => console.log(err));
+  //   };
+
   const googleLogin = useGoogleLogin({
     onSuccess: (tokenResponse) => {
-      setGoogleData(tokenResponse);
-      if (googleData.access_token) {
-        getProfile();
-      }
+      axios
+        .get(
+          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${tokenResponse.access_token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`,
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          //   setGoogleProfileData(res.data);
+          console.log(res.data);
+          const registerData = {
+            registerType: "google",
+            name: res.data.name,
+            email: res.data.email,
+            userId: res.data.id,
+            accessToken: tokenResponse.access_token,
+            profilePic: res.data.picture,
+          };
+          signup(registerData)
+            .then((res) => {
+              console.log(res);
+              if (res.status === 200) {
+                navigate("/");
+              }
+            })
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => console.log(err));
     },
     onError: (err) => console.log(err),
   });
 
-  const getProfile = () => {
-    axios
-      .get(
-        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${googleData.access_token}`,
-        {
-          headers: {
-            Authorization: `Bearer ${googleData.access_token}`,
-            Accept: "application/json",
-          },
-        }
-      )
+  //   const getProfile = () => {};
+
+  const emailRegister = () => {
+    const registerData = {
+      registerType: "email",
+      name: name,
+      email: email,
+      password: password,
+    };
+    signup(registerData)
       .then((res) => {
-        setGoogleProfileData(res.data);
-        if (googleProfileData.data) {
-          const registerData = {
-            registerType: "google",
-            name: googleProfileData.name,
-            email: googleProfileData.email,
-            userId: googleProfileData.id,
-            accessToken: googleData.access_token,
-            profilePic: googleProfileData.picture,
-          };
+        console.log(res);
+        if (res.status === 200) {
+          navigate("/");
         }
       })
       .catch((err) => console.log(err));
@@ -134,7 +202,7 @@ const Register = () => {
             </span>
           </div>
           <p className='text-gray-100'>or use email your account</p>
-          <form action='' className='sm:w-2/3 w-full px-4 lg:px-0 mx-auto'>
+          <form className='sm:w-2/3 w-full px-4 lg:px-0 mx-auto'>
             <div class='pb-2 pt-4'>
               <input
                 className='block w-full p-4 text-lg rounded-sm bg-black'
@@ -142,6 +210,7 @@ const Register = () => {
                 name='name'
                 id='name'
                 placeholder='Name'
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
 
@@ -152,6 +221,7 @@ const Register = () => {
                 id='email'
                 placeholder='Email'
                 className='block w-full p-4 text-lg rounded-sm bg-black'
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div class='pb-2 pt-4'>
@@ -161,6 +231,7 @@ const Register = () => {
                 name='password'
                 id='password'
                 placeholder='Password'
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div className='text-right text-gray-400 hover:text-gray-100'>
@@ -171,7 +242,11 @@ const Register = () => {
               </a>
             </div>
             <div className='px-4 pb-2 pt-4'>
-              <button className='uppercase block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none'>
+              <button
+                type='button'
+                className='uppercase block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none'
+                onClick={emailRegister}
+              >
                 sign up
               </button>
             </div>

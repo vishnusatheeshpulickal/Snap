@@ -2,21 +2,35 @@ import React, { useState, useRef, useEffect } from "react";
 import { HiMenu } from "react-icons/hi";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { Link, Route, Routes } from "react-router-dom";
+import { getToken } from "../auth/auth";
+import axios from "axios";
 
 import { Sidebar, Login, UserProfile } from "../components";
 import { logo } from "../assets";
 import Pins from "../container/Pins";
 
 const Home = () => {
-  const user = {
-    _id: "user123",
-    image: "https://avatars.githubusercontent.com/u/70451086?v=4",
-  };
+  const [user, setuser] = useState([]);
+  // const user = {
+  //   _id: "user123",
+  //   image: "https://avatars.githubusercontent.com/u/70451086?v=4",
+  // };
   const [toggleSidebar, setToggleSidebar] = useState(false);
   const scrollRef = useRef(null);
 
   useEffect(() => {
     scrollRef.current.scrollTo(0, 0);
+    const token = getToken();
+    const config = {
+      headers: { Authorization: token },
+    };
+    axios
+      .get("http://localhost:3100/api/v1/user/user", config)
+      .then((res) => {
+        console.log("data", res.data);
+        setuser(res.data.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
@@ -34,12 +48,8 @@ const Home = () => {
           <Link to='/'>
             <img src={logo} alt='logo' className='w-28' />
           </Link>
-          <Link to={`user-profile/"{user?._id}"`}>
-            <img
-              src='https://avatars.githubusercontent.com/u/70451086?v=4'
-              alt='logo'
-              className='w-28'
-            />
+          <Link to={`user-profile/${user?._id}`}>
+            <img src={user?.profilePic} alt='logo' className='w-28' />
           </Link>
         </div>
         {toggleSidebar && (

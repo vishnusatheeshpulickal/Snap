@@ -10,7 +10,8 @@ const userSchema = mongoose.Schema({
   },
   profilePic: {
     type: String,
-    default: "",
+    default:
+      "https://res.cloudinary.com/vishnusatheesh/image/upload/v1682066569/Snap/user_1_qnowjs.png",
   },
   password: {
     type: String,
