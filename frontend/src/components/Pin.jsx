@@ -13,13 +13,11 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
   const navigate = useNavigate();
-  // const alreadySaved = !!(save?.filter((item) => item.postedBy._id === user._id))?.length;
-  const alreadySaved = false; // For temporary
-  const user = {
-    google: {
-      userId: "user123",
-    },
-  };
+
+  const alreadySaved = currentUser ? currentUser.savedPins.includes(_id) : null;
+
+  const userPin = currentUser?._id === postedBy?._id;
+
   const token = getToken();
   const config = {
     headers: { Authorization: token },
@@ -34,12 +32,26 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
 
   const savePin = (_id) => {
     if (!alreadySaved) {
-      // Update the backend
+      axios
+        .post(
+          "http://localhost:3100/api/v1/user/savepin",
+          { pinId: _id },
+          config
+        )
+        .then((res) => console.log("Pined Saved"))
+        .catch((err) => console.log(err));
     }
   };
 
   const deletePin = (id) => {
-    // delete pin logics
+    axios
+      .post(
+        "http://localhost:3100/api/v1/user/deletepin",
+        { pinId: id },
+        config
+      )
+      .then((res) => console.log("Pin deleted successfully"))
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -72,24 +84,30 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
                   <MdDownloadForOffline />
                 </a>
               </div>
-              {alreadySaved ? (
-                <button
-                  type='button'
-                  className='bg-red-500 opacity-70 hover:opacity-100 text-white fond-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outlined-none'
-                >
-                  {save?.length}Saved
-                </button>
+              {!userPin ? (
+                <>
+                  {alreadySaved ? (
+                    <button
+                      type='button'
+                      className='bg-red-500 opacity-70 hover:opacity-100 text-white fond-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outlined-none'
+                    >
+                      {save?.length}Saved
+                    </button>
+                  ) : (
+                    <button
+                      type='button'
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        savePin(_id);
+                      }}
+                      className='bg-red-500 opacity-70 hover:opacity-100 text-white fond-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outlined-none'
+                    >
+                      Save
+                    </button>
+                  )}
+                </>
               ) : (
-                <button
-                  type='button'
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    savePin(_id);
-                  }}
-                  className='bg-red-500 opacity-70 hover:opacity-100 text-white fond-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outlined-none'
-                >
-                  Save
-                </button>
+                ""
               )}
             </div>
             <div className='flex justify-between items-center gap-2 w-full'>

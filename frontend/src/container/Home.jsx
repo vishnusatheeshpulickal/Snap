@@ -23,7 +23,6 @@ const Home = () => {
     axios
       .get("http://localhost:3100/api/v1/user/user", config)
       .then((res) => {
-        console.log("data", res.data);
         setuser(res.data.data);
       })
       .catch((err) => console.log(err));

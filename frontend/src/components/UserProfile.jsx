@@ -22,6 +22,8 @@ const UserProfile = () => {
   const [text, setText] = useState("Created");
   const [activeBtn, setActiveBtn] = useState("created");
 
+  const [loading, setLoading] = useState(false);
+
   const [currentUser, setCurrentUser] = useState(null);
 
   const navigate = useNavigate();
@@ -52,21 +54,31 @@ const UserProfile = () => {
 
   useEffect(() => {
     if (text === "Created") {
+      setLoading(true);
       axios
         .get(`http://localhost:3100/api/v1/user/createdpins/${userId}`, config)
         .then((res) => {
           setPins(res.data.data);
-          console.log(pins);
+          setLoading(false);
         })
         .catch((err) => console.log(err));
     } else {
-      // user saved pins
+      setLoading(true);
+      axios
+        .get(`http://localhost:3100/api/v1/user/savedpins/${userId}`, config)
+        .then((res) => {
+          setSavedPins(res.data.data.savedPins);
+          setLoading(false);
+        })
+        .catch((err) => console.log(err));
     }
   }, [text, userId]);
 
   if (!user) {
     return <Spinner message='Loading profile...' />;
   }
+
+  console.log(savedPins?.length);
 
   return (
     <div className='relative pb-2 h-full justify-center items-center'>
@@ -85,7 +97,7 @@ const UserProfile = () => {
             />
             <h1 className='font-bold text-3xl text-center mt-3'>{user.name}</h1>
             <div className='absolute top-0 z-1 right-0 p-2'>
-              {userId === currentUser._id && (
+              {userId === currentUser?._id && (
                 <div className='bg-white p-2 rounded-full cursor-pointer outline-none shadow-md'>
                   <AiOutlineLogout color='red' fontSize={21} />
                 </div>
@@ -128,6 +140,8 @@ const UserProfile = () => {
                 No pins found!
               </div>
             )
+          ) : loading ? (
+            <Spinner message='Loading pin...' />
           ) : savedPins?.length ? (
             <div className='px-2'>
               <MasonryLayout pins={savedPins} />

@@ -36,7 +36,6 @@ const register = async (req, res) => {
 const login = async (req, res) => {};
 
 const user = async (req, res) => {
-  // console.log(req);
   const user = await User.findById(req.user._id);
   if (!user)
     return res
@@ -139,6 +138,49 @@ const viewPins = async (req, res) => {
   });
 };
 
+const savePin = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (!user)
+    return res.status(200).send({ success: false, message: "User not found!" });
+  user.savedPins.push(req.body.pinId);
+  const result = await user.save();
+  if (!result)
+    return res.status(500).send({ success: false, message: "Failed to save!" });
+  res.status(200).send({ success: true, message: "Successfully saved" });
+};
+
+const deletePin = async (req, res) => {
+  const pin = await Post.findByIdAndDelete(req.body.pinId);
+  if (!pin)
+    return res
+      .status(404)
+      .send({ success: false, message: "Failed to delete pin!" });
+  await destroy(pin.image);
+  res.status(200).send({ success: true, message: "Successfully deleted Pin" });
+};
+
+const savedPins = async (req, res) => {
+  const pins = await User.findById(req.params.id)
+    .populate({
+      path: "savedPins",
+      model: "Post",
+      populate: {
+        path: "postedBy",
+        model: "User",
+      },
+    })
+    .select("savedPins");
+  if (!pins)
+    return res
+      .status(404)
+      .send({ success: false, message: "Failed to fetch the data!" });
+  res.status(200).send({
+    success: true,
+    message: "Successfully fetched the data",
+    data: pins,
+  });
+};
+
 module.exports = {
   register,
   login,
@@ -150,4 +192,7 @@ module.exports = {
   pinDetails,
   createdPins,
   viewPins,
+  savePin,
+  deletePin,
+  savedPins,
 };

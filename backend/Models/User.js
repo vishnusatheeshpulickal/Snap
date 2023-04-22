@@ -25,6 +25,12 @@ const userSchema = mongoose.Schema({
   accessToken: {
     type: String,
   },
+  savedPins: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+    },
+  ],
 });
 
 const User = mongoose.model("User", userSchema);
