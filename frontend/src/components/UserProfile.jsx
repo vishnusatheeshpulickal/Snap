@@ -18,21 +18,33 @@ const notActiveBtnStyles =
 const UserProfile = () => {
   const [user, setUser] = useState(null);
   const [pins, setPins] = useState(null);
+  const [savedPins, setSavedPins] = useState(null);
   const [text, setText] = useState("Created");
   const [activeBtn, setActiveBtn] = useState("created");
+
+  const [currentUser, setCurrentUser] = useState(null);
 
   const navigate = useNavigate();
   const { userId } = useParams();
 
+  const token = getToken();
+  const config = {
+    headers: { Authorization: token },
+  };
+
   useEffect(() => {
-    const token = getToken();
-    const config = {
-      headers: { Authorization: token },
-    };
+    axios
+      .get("http://localhost:3100/api/v1/user/user", config)
+      .then((res) => {
+        setCurrentUser(res.data.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
     axios
       .get(`http://localhost:3100/api/v1/user/viewuser/${userId}`, config)
       .then((res) => {
-        console.log(res);
         setUser(res.data.data);
       })
       .catch((err) => console.log(err));
@@ -40,7 +52,13 @@ const UserProfile = () => {
 
   useEffect(() => {
     if (text === "Created") {
-      // user created pins
+      axios
+        .get(`http://localhost:3100/api/v1/user/createdpins/${userId}`, config)
+        .then((res) => {
+          setPins(res.data.data);
+          console.log(pins);
+        })
+        .catch((err) => console.log(err));
     } else {
       // user saved pins
     }
@@ -67,7 +85,7 @@ const UserProfile = () => {
             />
             <h1 className='font-bold text-3xl text-center mt-3'>{user.name}</h1>
             <div className='absolute top-0 z-1 right-0 p-2'>
-              {userId === user._id && (
+              {userId === currentUser._id && (
                 <div className='bg-white p-2 rounded-full cursor-pointer outline-none shadow-md'>
                   <AiOutlineLogout color='red' fontSize={21} />
                 </div>
@@ -85,7 +103,7 @@ const UserProfile = () => {
                 activeBtn === "saved" ? activeBtnStyles : notActiveBtnStyles
               }`}
             >
-              Created
+              Saved
             </button>
             <button
               type='button'
@@ -97,12 +115,22 @@ const UserProfile = () => {
                 activeBtn === "created" ? activeBtnStyles : notActiveBtnStyles
               }`}
             >
-              Saved
+              Created
             </button>
           </div>
-          {pins?.length ? (
+          {activeBtn === "created" ? (
+            pins?.length ? (
+              <div className='px-2'>
+                <MasonryLayout pins={pins} />
+              </div>
+            ) : (
+              <div className='flex justify-center font-bold items-center w-full text-xl mt-2'>
+                No pins found!
+              </div>
+            )
+          ) : savedPins?.length ? (
             <div className='px-2'>
-              <MasonryLayout pins={pins} />
+              <MasonryLayout pins={savedPins} />
             </div>
           ) : (
             <div className='flex justify-center font-bold items-center w-full text-xl mt-2'>

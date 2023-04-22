@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { MdDownloadForOffline } from "react-icons/md";
 import { AiTwotoneDelete } from "react-icons/ai";
 import { BsFillArrowUpRightCircleFill } from "react-icons/bs";
+import axios from "axios";
+import getDownloadUrl from "./getDownloadUrl";
+import { getToken } from "../auth/auth";
 
 const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
   const [postHovered, setPostHovered] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const navigate = useNavigate();
   // const alreadySaved = !!(save?.filter((item) => item.postedBy._id === user._id))?.length;
@@ -16,6 +20,17 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
       userId: "user123",
     },
   };
+  const token = getToken();
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3100/api/v1/user/user", config)
+      .then((res) => setCurrentUser(res.data.data))
+      .catch((err) => console.log(err));
+  }, [_id]);
 
   const savePin = (_id) => {
     if (!alreadySaved) {
@@ -49,7 +64,7 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
             <div className='flex item-center justify-between'>
               <div className='flex gap-2'>
                 <a
-                  href={`${image?.url}?dl=`}
+                  href={`${image ? getDownloadUrl(image) : ""}`}
                   download
                   onClick={(e) => e.stopPropagation()}
                   className='bg-white w-9 h-9 rounded-full flex items-center justify-center text-dark text-xl opacity-75 hover:opacity-100 hover:shadow-md outline-none'
@@ -92,7 +107,7 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
                   <BsFillArrowUpRightCircleFill /> link
                 </a>
               )}
-              {postedBy?._id === user.google.userId && (
+              {postedBy?._id === currentUser?._id && (
                 <button
                   type='button'
                   className='bg-white p-2 opacity-70 hover:opacity-100 fond-bold text-dark rounded-3xl hover:shadow-md outlined-none'
@@ -110,16 +125,16 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
       </div>
       <div>
         <Link
-          to={`user-profile/${postedBy?._id}`}
+          to={`/user-profile/${postedBy?._id}`}
           className='flex gap-2 mt-2 items-center'
         >
           <img
-            src={postedBy?.imageUrl}
+            src={postedBy?.profilePic}
             className='w-8 h-8 rounded-full object-cover'
             alt='user-profile'
           />
 
-          <p className='font-semibold capitalize'>{postedBy?.userName}</p>
+          <p className='font-semibold capitalize'>{postedBy?.name}</p>
         </Link>
       </div>
     </div>

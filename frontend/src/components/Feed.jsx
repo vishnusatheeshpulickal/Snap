@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import MasonryLayout from "./MasonryLayout";
 import Spinner from "./Spinner";
+import { getToken } from "../auth/auth";
 
 const data = [
   {
@@ -111,8 +112,8 @@ const data = [
       "https://images.pexels.com/photos/5496463/pexels-photo-5496463.jpeg?auto=compress&cs=tinysrgb&w=600",
     postedBy: {
       _id: "user125",
-      userName: "John",
-      imageUrl:
+      name: "John",
+      profilePic:
         "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVyc29uYXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
     },
   },
@@ -149,19 +150,28 @@ const data = [
 const Feeds = () => {
   const [loading, setLoading] = useState(false);
   // const [pins, setPins] = useState(null);
-  const [pins, setPins] = useState(data);
+  const [pins, setPins] = useState(null);
   const { categoryId } = useParams();
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   if (categoryId) {
-  //   } else {
-  axios
-    .get("")
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
-  //   }
-  // }, [categoryId])
+  const token = getToken();
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    if (categoryId) {
+    } else {
+      setLoading(true);
+      axios
+        .get("http://localhost:3100/api/v1/user/viewpins", config)
+        .then((res) => {
+          setPins(res.data.data);
+          setLoading(false);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [categoryId]);
 
   if (loading)
     return <Spinner message='we are adding new ideas to your feed!' />;

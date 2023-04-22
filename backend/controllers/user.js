@@ -111,6 +111,34 @@ const deleteUploaded = async (req, res) => {
   }
 };
 
+const createdPins = async (req, res) => {
+  const pins = await Post.find({ postedBy: req.params.id }).populate(
+    "postedBy"
+  );
+  if (!pins)
+    return res
+      .status(500)
+      .send({ success: false, message: "Failed to fetch the data!" });
+  res.status(200).send({
+    success: true,
+    message: "Successfully fetched the data",
+    data: pins,
+  });
+};
+
+const viewPins = async (req, res) => {
+  const pins = await Post.find().populate("postedBy");
+  if (!pins)
+    return res
+      .status(500)
+      .send({ success: false, message: "Failed to fetch the data!" });
+  res.status(200).send({
+    success: true,
+    message: "Successfully fetched the data!",
+    data: pins,
+  });
+};
+
 module.exports = {
   register,
   login,
@@ -120,4 +148,6 @@ module.exports = {
   deleteUploaded,
   post,
   pinDetails,
+  createdPins,
+  viewPins,
 };
