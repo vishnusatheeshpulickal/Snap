@@ -72,9 +72,26 @@ const post = async (req, res) => {
     return res
       .status(500)
       .send({ success: false, message: "Failed to save pin!" });
+
+  const result = await post.save();
+  if (!result)
+    return res
+      .status(500)
+      .send({ success: false, message: "Failed to save pin!" });
   res
     .status(200)
     .send({ success: true, message: "Successfully saved the pin" });
+};
+
+const pinDetails = async (req, res) => {
+  const pin = await Post.findById(req.params.id).populate("postedBy");
+  if (!pin)
+    return res.status(404).send({ success: false, message: "Pin not found!" });
+  res.status(200).send({
+    success: true,
+    message: "Successfully fetched the data",
+    data: pin,
+  });
 };
 
 const uploadImage = (req, res) => {
@@ -102,4 +119,5 @@ module.exports = {
   uploadImage,
   deleteUploaded,
   post,
+  pinDetails,
 };

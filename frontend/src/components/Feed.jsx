@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 import MasonryLayout from "./MasonryLayout";
 import Spinner from "./Spinner";
 
@@ -155,7 +156,10 @@ const Feeds = () => {
   //   setLoading(true);
   //   if (categoryId) {
   //   } else {
-
+  axios
+    .get("")
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
   //   }
   // }, [categoryId])
 

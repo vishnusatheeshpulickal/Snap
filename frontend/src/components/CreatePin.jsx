@@ -77,7 +77,7 @@ const CreatePin = ({ user }) => {
         title,
         about,
         category,
-        image: imageAsset,
+        imageAsset,
       };
 
       axios

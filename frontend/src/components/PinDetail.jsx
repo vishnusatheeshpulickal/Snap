@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import { MdDownloadForOffline } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 import MasonryLayout from "./MasonryLayout";
 import Spinner from "./Spinner";
+import getDownloadUrl from "./getDownloadUrl";
+import { getToken } from "../auth/auth";
 
 const PinDetail = ({ user }) => {
   const [pins, setPins] = useState(null);
@@ -13,7 +16,16 @@ const PinDetail = ({ user }) => {
   const { pinId } = useParams();
 
   const fetchPinDetails = () => {
-    // logic to fetch data from backend
+    const token = getToken();
+    const config = {
+      headers: { Authorization: token },
+    };
+    axios
+      .get(`http://localhost:3100/api/v1/user/pindetails/${pinId}`, config)
+      .then((res) => {
+        setPinDetail(res.data.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
@@ -38,7 +50,7 @@ const PinDetail = ({ user }) => {
         <div className='flex items-center justify-between '>
           <div className='flex gap-2 items-center'>
             <a
-              href={`google.com`}
+              href={`${getDownloadUrl(pinDetail.image)}`}
               download
               onClick={(e) => e.stopPropagation()}
               className='bg-white w-9 h-9 rounded-full flex items-center justify-center text-dark text-xl opacity-75 hover:opacity-100 hover:shadow-md outline-none'
@@ -57,18 +69,16 @@ const PinDetail = ({ user }) => {
           <p className='mt-3'>{pinDetail.about}</p>
         </div>
         <Link
-          to={`user-profile/${pinDetail.postedBy?._id}`}
+          to={`/user-profile/${pinDetail.postedBy?._id}`}
           className='flex gap-2 mt-2 items-center'
         >
           <img
-            src={pinDetail.postedBy?.imageUrl}
+            src={pinDetail.postedBy?.profilePic}
             className='w-8 h-8 rounded-full object-cover'
             alt='user-profile'
           />
 
-          <p className='font-semibold capitalize'>
-            {pinDetail.postedBy?.userName}
-          </p>
+          <p className='font-semibold capitalize'>{pinDetail.postedBy?.name}</p>
         </Link>
       </div>
     </div>
