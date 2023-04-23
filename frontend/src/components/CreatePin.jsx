@@ -17,7 +17,6 @@ const CreatePin = ({ user }) => {
     "Photography",
     "Travel",
     "Food",
-    "Arts",
   ];
 
   const [title, setTitle] = useState("");

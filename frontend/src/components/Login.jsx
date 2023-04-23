@@ -6,6 +6,7 @@ import { signin, socialSignin } from "../auth/auth";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+import { bg2 } from "../assets";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -76,22 +77,23 @@ const Login = () => {
     });
   };
 
+  const randomImage =
+    "https://source.unsplash.com/1600x900/?nature,photography,travel";
+
   return (
     <section className='min-h-screen flex items-stretch text-white '>
       <div
         className='lg:flex w-1/2 hidden bg-gray-500 bg-no-repeat bg-cover relative items-center'
         style={{
-          backgroundImage: `url("https://images.unsplash.com/photo-1577495508048-b635879837f1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=675&q=80")`,
+          backgroundImage: `url(${randomImage})`,
         }}
       >
         <div className='absolute bg-black opacity-60 inset-0 z-0'></div>
         <div className='w-full px-24 z-10'>
           <h1 className='text-5xl font-bold text-left tracking-wide'>
-            Keep it special
+            Focus on Life
           </h1>
-          <p className='text-3xl my-4'>
-            Capture your personal memory in unique way, anywhere.
-          </p>
+          <p className='text-3xl my-4'>See the world through your own lens.</p>
         </div>
         <div className='bottom-0 absolute p-4 text-center right-0 left-0 flex justify-center space-x-4'>
           {/*                social media icons  */}

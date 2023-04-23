@@ -1,1 +1,10 @@
 export { default as logo } from "./logo.png";
+export { default as animals } from "./animals.jpg";
+export { default as gaming } from "./gaming.jpg";
+export { default as coding } from "./coding.jpg";
+export { default as photography } from "./photography.jpg";
+export { default as nature } from "./nature.jpg";
+export { default as travel } from "./travel.jpg";
+export { default as food } from "./food.jpg";
+export { default as vehicles } from "./vehicle.jpg";
+export { default as bg2 } from "./bg-2.jpg";

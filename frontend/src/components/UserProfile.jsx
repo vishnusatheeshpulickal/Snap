@@ -5,7 +5,7 @@ import axios from "axios";
 
 import MasonryLayout from "./MasonryLayout";
 import Spinner from "./Spinner";
-import { getToken } from "../auth/auth";
+import { getToken, signout } from "../auth/auth";
 
 const randomImage =
   "https://source.unsplash.com/1600x900/?nature,photography,technology";
@@ -78,7 +78,10 @@ const UserProfile = () => {
     return <Spinner message='Loading profile...' />;
   }
 
-  console.log(savedPins?.length);
+  const signOut = () => {
+    signout();
+    window.location.reload(false);
+  };
 
   return (
     <div className='relative pb-2 h-full justify-center items-center'>
@@ -99,7 +102,11 @@ const UserProfile = () => {
             <div className='absolute top-0 z-1 right-0 p-2'>
               {userId === currentUser?._id && (
                 <div className='bg-white p-2 rounded-full cursor-pointer outline-none shadow-md'>
-                  <AiOutlineLogout color='red' fontSize={21} />
+                  <AiOutlineLogout
+                    color='red'
+                    fontSize={21}
+                    onClick={signOut}
+                  />
                 </div>
               )}
             </div>
