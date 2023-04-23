@@ -19,6 +19,14 @@ const Feeds = () => {
   useEffect(() => {
     setLoading(true);
     if (categoryId) {
+      setLoading(true);
+      axios
+        .get(`http://localhost:3100/api/v1/user/viewpins/${categoryId}`, config)
+        .then((res) => {
+          setPins(res.data.data);
+          setLoading(false);
+        })
+        .catch((err) => console.log(err));
     } else {
       setLoading(true);
       axios

@@ -96,7 +96,6 @@ const Register = () => {
         )
         .then((res) => {
           //   setGoogleProfileData(res.data);
-          console.log(res.data);
           const registerData = {
             registerType: "google",
             name: res.data.name,

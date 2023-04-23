@@ -3,6 +3,7 @@ const Post = require("../Models/Post");
 const generateToken = require("../utils/generateToken");
 const { hashPassword } = require("../utils/hashPassword");
 const { destroy } = require("../utils/cloudinaryConfig");
+const bcrypt = require("bcrypt");
 
 const register = async (req, res) => {
   const user = await new User({
@@ -33,7 +34,42 @@ const register = async (req, res) => {
     .send({ success: true, message: "Registration successful", token: token });
 };
 
-const login = async (req, res) => {};
+const login = async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+  if (!user)
+    return res
+      .status(400)
+      .send({ success: false, message: "Incorrect password or email!" });
+  if (!bcrypt.compareSync(req.body.password, user.password))
+    return res
+      .status(400)
+      .send({ success: false, message: "Invalid username or password!" });
+  const token = generateToken(user.email);
+  res.status(200).send({
+    success: true,
+    message: "Successfully loggedIn",
+    token,
+  });
+};
+
+const socialLogin = async (req, res) => {
+  const user = await User.findOne({
+    userId: req.body.userId,
+    typeRegister: req.body.type,
+  });
+  if (!user)
+    return res
+      .status(400)
+      .send({ success: false, message: "Incorrect password or email!" });
+  user.accessToken = req.body.accessToken;
+  const result = await user.save();
+  if (!result)
+    return res.status(400).send({ success: false, message: "Login failed!" });
+  const token = generateToken(user.email);
+  res
+    .status(200)
+    .send({ success: true, message: "Successfully loggedin", token });
+};
 
 const user = async (req, res) => {
   const user = await User.findById(req.user._id);
@@ -138,6 +174,21 @@ const viewPins = async (req, res) => {
   });
 };
 
+const viewCategoryPins = async (req, res) => {
+  const pins = await Post.find({ category: req.params.category }).populate(
+    "postedBy"
+  );
+  if (!pins)
+    return res
+      .status(500)
+      .send({ success: false, message: "Failed to fetch the data!" });
+  res.status(200).send({
+    success: true,
+    message: "Successfully fetched the data!",
+    data: pins,
+  });
+};
+
 const savePin = async (req, res) => {
   const user = await User.findById(req.user._id);
   if (!user)
@@ -184,6 +235,7 @@ const savedPins = async (req, res) => {
 module.exports = {
   register,
   login,
+  socialLogin,
   user,
   viewUser,
   uploadImage,
@@ -195,4 +247,5 @@ module.exports = {
   savePin,
   deletePin,
   savedPins,
+  viewCategoryPins,
 };

@@ -130,7 +130,9 @@ const UserProfile = () => {
               Created
             </button>
           </div>
-          {activeBtn === "created" ? (
+          {loading ? (
+            <Spinner message='Loading pin...' />
+          ) : activeBtn === "created" ? (
             pins?.length ? (
               <div className='px-2'>
                 <MasonryLayout pins={pins} />

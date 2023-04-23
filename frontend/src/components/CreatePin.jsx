@@ -8,7 +8,17 @@ import axios from "axios";
 import { getToken } from "../auth/auth";
 
 const CreatePin = ({ user }) => {
-  const categoryData = ["Coding", "Vehicles", "Animals", "Gaming"];
+  const categoryData = [
+    "Coding",
+    "Vehicles",
+    "Animals",
+    "Gaming",
+    "Nature",
+    "Photography",
+    "Travel",
+    "Food",
+    "Arts",
+  ];
 
   const [title, setTitle] = useState("");
   const [about, setAbout] = useState("");

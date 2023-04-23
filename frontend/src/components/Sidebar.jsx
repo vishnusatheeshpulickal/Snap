@@ -15,9 +15,14 @@ const Sidebar = ({ user, closeToggle }) => {
 
   const categories = [
     { name: "Animals" },
-    { name: "Wallpapers" },
     { name: "Gaming" },
     { name: "Coding" },
+    { name: "Vehicles" },
+    { name: "Nature" },
+    { name: "Photography" },
+    { name: "Travel" },
+    { name: "Food" },
+    { name: "Arts" },
   ];
   return (
     <div className='flex flex-col justify-between bg-white h-full overflow-y-scroll min-w-210 hide-scrollbar'>
@@ -43,7 +48,7 @@ const Sidebar = ({ user, closeToggle }) => {
           <h3 className='mt-2 px-5 text-base 2xl:text-xl'>
             Discover categories
           </h3>
-          {categories.slice(0, categories.length - 1).map((category) => (
+          {categories.slice(0, categories.length).map((category) => (
             <NavLink
               to={`/category/${category.name}`}
               className={({ isActive }) =>

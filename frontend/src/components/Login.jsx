@@ -2,13 +2,80 @@ import React, { useState } from "react";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { facebookAuth } from "../config";
 import { logo } from "../assets";
+import { signin, socialSignin } from "../auth/auth";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [incorrect, setIncorrect] = useState(false);
+
   const responseFacebook = (response) => {
-    console.log(response);
+    const type = "facebook";
+    socialSignin(type, response.userID, response.accessToken).then((res) => {
+      if (res.valid === true && res.status === 200) {
+        setIncorrect(false);
+        navigate("/");
+      }
+      if (res.valid === false && res.status === 400) {
+        setIncorrect(true);
+      }
+    });
   };
 
-  console.log(facebookAuth.clientId);
+  const googleLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      axios
+        .get(
+          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${tokenResponse.access_token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`,
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          const type = "google";
+          socialSignin(type, res.data.id, tokenResponse.access_token).then(
+            (res) => {
+              if (res.valid === true && res.status === 200) {
+                setIncorrect(false);
+                navigate("/");
+              }
+              if (res.valid === false && res.status === 400) {
+                setIncorrect(true);
+              }
+            }
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+          setIncorrect(true);
+        });
+    },
+    onError: (err) => {
+      console.log(err);
+      setIncorrect(true);
+    },
+  });
+
+  const emailLogin = () => {
+    signin(email, password).then((res) => {
+      if (res.valid === true && res.status === 200) {
+        setIncorrect(false);
+        navigate("/");
+      }
+      if (res.valid === false && res.status === 400) {
+        setIncorrect(true);
+      }
+    });
+  };
+
   return (
     <section className='min-h-screen flex items-stretch text-white '>
       <div
@@ -48,6 +115,32 @@ const Login = () => {
               <img src={logo} alt='logo' class='w-40 h-auto' />
             </div>
           </h1>
+
+          {incorrect ? (
+            <div
+              class='flex p-4 mb-4 text-sm text-red-800 text-center justify-center rounded-lg bg-red-40 dark:text-red-400'
+              role='alert'
+            >
+              <svg
+                aria-hidden='true'
+                class='flex-shrink-0 inline w-5 h-5 mr-3'
+                fill='currentColor'
+                viewBox='0 0 20 20'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  fill-rule='evenodd'
+                  d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z'
+                  clip-rule='evenodd'
+                ></path>
+              </svg>
+              <span class='sr-only'>Info</span>
+              <div>
+                <span class='font-medium'></span> Incorrect username or password
+              </div>
+            </div>
+          ) : null}
+
           <div className='py-6 space-x-2'>
             <FacebookLogin
               appId={facebookAuth.clientId}
@@ -58,20 +151,22 @@ const Login = () => {
                   onClick={renderProps.onClick}
                   className='w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white cursor-pointer'
                 >
-                  f
+                  <i
+                    class='fa-brands fa-facebook-f'
+                    style={{ color: "#ffffff" }}
+                  ></i>
                 </span>
               )}
             />
-
-            <span className='w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white'>
-              G+
-            </span>
-            <span className='w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white'>
-              in
+            <span
+              className='w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white cursor-pointer'
+              onClick={() => googleLogin()}
+            >
+              <i class='fa-brands fa-google' style={{ color: "#ffffff" }}></i>
             </span>
           </div>
           <p className='text-gray-100'>or use email your account</p>
-          <form action='' className='sm:w-2/3 w-full px-4 lg:px-0 mx-auto'>
+          <form className='sm:w-2/3 w-full px-4 lg:px-0 mx-auto'>
             <div className='pb-2 pt-4'>
               <input
                 type='email'
@@ -79,6 +174,7 @@ const Login = () => {
                 id='email'
                 placeholder='Email'
                 className='block w-full p-4 text-lg rounded-sm bg-black'
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div class='pb-2 pt-4'>
@@ -88,6 +184,7 @@ const Login = () => {
                 name='password'
                 id='password'
                 placeholder='Password'
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div className='text-right text-gray-400 hover:text-gray-100'>
@@ -98,7 +195,11 @@ const Login = () => {
               </a>
             </div>
             <div className='px-4 pb-2 pt-4'>
-              <button className='uppercase block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none'>
+              <button
+                className='uppercase block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none'
+                onClick={() => emailLogin()}
+                type='button'
+              >
                 sign in
               </button>
             </div>

@@ -50,6 +50,30 @@ export const signin = (email, password) => {
     });
 };
 
+export const socialSignin = (type, userId, accessToken) => {
+  return axios
+    .post("http://localhost:3100/api/v1/sociallogin", {
+      type,
+      userId,
+      accessToken,
+    })
+    .then(async (res) => {
+      saveToken(res.data.token);
+      return {
+        valid: true,
+        status: res.status,
+        message: res.data.message,
+      };
+    })
+    .catch((err) => {
+      return {
+        valid: false,
+        status: 400,
+        message: "Invalid username or password",
+      };
+    });
+};
+
 const saveToken = (token) => {
   const data = `Bearer ${token}`;
   window.localStorage.setItem("Snap", data);
