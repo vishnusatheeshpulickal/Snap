@@ -22,7 +22,7 @@ const CreatePin = ({ user }) => {
 
   const [title, setTitle] = useState("");
   const [about, setAbout] = useState("");
-  const [destination, setDestination] = useState("");
+  const [destination, setDestination] = useState(null);
   const [loading, setLoading] = useState(false);
   const [fields, setFields] = useState(false);
   const [category, setCategory] = useState(null);
@@ -82,12 +82,13 @@ const CreatePin = ({ user }) => {
     const config = {
       headers: { Authorization: token },
     };
-    if (title && about && destination && imageAsset && category) {
+    if (title && about && imageAsset && category) {
       const data = {
         title,
         about,
         category,
         imageAsset,
+        destination,
       };
 
       axios

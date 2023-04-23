@@ -13,6 +13,7 @@ const {
   deletePin,
   savedPins,
   viewCategoryPins,
+  searchPin,
 } = require("../controllers/user");
 const { protect } = require("../middlewares/auth");
 const { upload } = require("../utils/cloudinaryConfig");
@@ -29,5 +30,6 @@ router.get("/viewpins/:category", protect, viewCategoryPins);
 router.post("/savepin", protect, savePin);
 router.post("/deletepin", protect, deletePin);
 router.get("/savedPins/:id", protect, savedPins);
+router.post("/search", searchPin);
 
 module.exports = router;

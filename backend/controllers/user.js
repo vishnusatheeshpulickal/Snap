@@ -102,6 +102,7 @@ const post = async (req, res) => {
     category: req.body.category,
     image: req.body.imageAsset,
     postedBy: req.user._id,
+    destination: req.body.destination,
   });
   if (!post)
     return res
@@ -223,10 +224,25 @@ const savedPins = async (req, res) => {
     .select("savedPins");
   if (!pins)
     return res
-      .status(404)
+      .status(400)
       .send({ success: false, message: "Failed to fetch the data!" });
   res.status(200).send({
     success: true,
+    message: "Successfully fetched the data",
+    data: pins,
+  });
+};
+
+const searchPin = async (req, res) => {
+  console.log(req.body.searchTerm);
+  const regex = new RegExp(req.body.searchTerm, "i");
+  const pins = await Post.find({ title: regex }).populate("postedBy");
+  if (!pins)
+    return res
+      .status(500)
+      .send({ success: false, message: "Failed to fetch the data" });
+  res.status(200).send({
+    success: false,
     message: "Successfully fetched the data",
     data: pins,
   });
@@ -248,4 +264,5 @@ module.exports = {
   deletePin,
   savedPins,
   viewCategoryPins,
+  searchPin,
 };
