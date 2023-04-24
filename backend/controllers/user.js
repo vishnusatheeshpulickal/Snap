@@ -4,6 +4,7 @@ const generateToken = require("../utils/generateToken");
 const { hashPassword } = require("../utils/hashPassword");
 const { destroy } = require("../utils/cloudinaryConfig");
 const bcrypt = require("bcrypt");
+const { sendMail } = require("../services/mail");
 
 const register = async (req, res) => {
   const user = await new User({
@@ -23,6 +24,7 @@ const register = async (req, res) => {
       .status(500)
       .send({ success: false, message: "Registration failed!" });
   const result = await user.save();
+  await sendMail(req.body.email, req.body.name);
   if (!result)
     return res
       .status(500)

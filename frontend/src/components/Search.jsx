@@ -16,7 +16,7 @@ const Search = ({ searchTerm }) => {
   useEffect(() => {
     if (searchTerm) {
       setLoading(true);
-      // search request
+
       axios
         .post(
           `http://localhost:3100/api/v1/user/search`,
@@ -25,7 +25,6 @@ const Search = ({ searchTerm }) => {
         )
         .then((res) => {
           setPins(res.data.data);
-          console.log(res.data.data);
           setLoading(false);
         })
         .catch((err) => console.log(err));

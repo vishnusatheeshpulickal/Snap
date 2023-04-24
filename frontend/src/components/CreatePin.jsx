@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
+import { FaSpinner } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Spinner from "./Spinner";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import Spinner from "./Spinner";
 
 import { getToken } from "../auth/auth";
 
@@ -28,6 +30,8 @@ const CreatePin = ({ user }) => {
   const [categories, setCategories] = useState(categoryData);
   const [imageAsset, setImageAsset] = useState(null);
   const [wrongImageType, setWrongImageType] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const uploadImage = (e) => {
     const token = getToken();
@@ -77,6 +81,7 @@ const CreatePin = ({ user }) => {
   };
 
   const savePin = () => {
+    setIsLoading(true);
     const token = getToken();
     const config = {
       headers: { Authorization: token },
@@ -93,9 +98,23 @@ const CreatePin = ({ user }) => {
       axios
         .post("http://localhost:3100/api/v1/user/newpin", data, config)
         .then((res) => {
-          console.log(res);
+          setIsLoading(false);
+          toast.success("Successfully added new Pin", {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          navigate("/");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          setIsLoading(false);
+        });
     }
   };
 
@@ -207,14 +226,34 @@ const CreatePin = ({ user }) => {
               <button
                 type='button'
                 onClick={savePin}
-                className='bg-red-500 text-white font-bold p-2 rounded-full w-28 outline-none'
+                className='bg-red-500 text-white font-bold p-2 rounded-full w-28 outline-none relative h-10'
+                style={{ display: "inline-block" }}
+                disabled={isLoading}
               >
-                Save Pin
+                {isLoading ? (
+                  <span className='absolute inset-0 flex justify-center items-center'>
+                    <FaSpinner className='animate-spin' />
+                  </span>
+                ) : (
+                  "Save Pin"
+                )}
               </button>
             </div>
           </div>
         </div>
       </div>
+      <ToastContainer
+        position='bottom-right'
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='light'
+      />
     </div>
   );
 };
