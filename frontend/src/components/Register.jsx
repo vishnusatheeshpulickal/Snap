@@ -3,6 +3,8 @@ import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props
 import { useGoogleLogin } from "@react-oauth/google";
 import { Link, useNavigate } from "react-router-dom";
 import { signup } from "../auth/auth";
+import Spinner from "./Spinner";
+import { FaSpinner } from "react-icons/fa";
 
 import { facebookAuth } from "../config";
 import axios from "axios";
@@ -12,10 +14,13 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSocialLoading, setIsSocialLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const responseFacebook = (response) => {
+    setIsSocialLoading(true);
     const registerdata = {
       registerType: "facebook",
       name: response.name,
@@ -26,12 +31,15 @@ const Register = () => {
     };
     signup(registerdata)
       .then((res) => {
-        console.log(res);
+        setIsSocialLoading(false);
         if (res.status === 200) {
           navigate("/");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setIsSocialLoading(false);
+      });
   };
 
   //   const googleLogin = useGoogleLogin({
@@ -96,6 +104,7 @@ const Register = () => {
         )
         .then((res) => {
           //   setGoogleProfileData(res.data);
+          setIsSocialLoading(true);
           const registerData = {
             registerType: "google",
             name: res.data.name,
@@ -106,21 +115,31 @@ const Register = () => {
           };
           signup(registerData)
             .then((res) => {
-              console.log(res);
+              setIsSocialLoading(false);
               if (res.status === 200) {
                 navigate("/");
               }
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+              console.log(err);
+              setIsSocialLoading(false);
+            });
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setIsSocialLoading(false);
+          console.log(err);
+        });
     },
-    onError: (err) => console.log(err),
+    onError: (err) => {
+      console.log(err);
+      setIsSocialLoading(false);
+    },
   });
 
   //   const getProfile = () => {};
 
   const emailRegister = () => {
+    setIsLoading(true);
     const registerData = {
       registerType: "email",
       name: name,
@@ -130,6 +149,7 @@ const Register = () => {
     signup(registerData)
       .then((res) => {
         console.log(res);
+        setIsLoading(false);
         if (res.status === 200) {
           navigate("/");
         }
@@ -245,15 +265,21 @@ const Register = () => {
             </div>
             <div className='px-4 pb-2 pt-4'>
               <button
+                disabled={isLoading}
                 type='button'
                 className='uppercase block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none'
                 onClick={emailRegister}
               >
-                sign up
+                {isLoading ? <FaSpinner className='animate-spin' /> : "sign up"}
               </button>
             </div>
           </form>
         </div>
+        {isSocialLoading ? (
+          <span className='absolute inset-0 flex justify-center items-center'>
+            <FaSpinner className='animate-spin' />{" "}
+          </span>
+        ) : null}
       </div>
     </section>
   );

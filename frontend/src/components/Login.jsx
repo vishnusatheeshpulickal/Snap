@@ -7,6 +7,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { bg2 } from "../assets";
+import { FaSpinner } from "react-icons/fa";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Login = () => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [incorrect, setIncorrect] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const responseFacebook = (response) => {
     const type = "facebook";
@@ -66,13 +68,16 @@ const Login = () => {
   });
 
   const emailLogin = () => {
+    setIsLoading(true);
     signin(email, password).then((res) => {
       if (res.valid === true && res.status === 200) {
         setIncorrect(false);
+        setIsLoading(false);
         navigate("/");
       }
       if (res.valid === false && res.status === 400) {
         setIncorrect(true);
+        setIsLoading(false);
       }
     });
   };
@@ -201,8 +206,9 @@ const Login = () => {
                 className='uppercase block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none'
                 onClick={() => emailLogin()}
                 type='button'
+                disabled={isLoading}
               >
-                sign in
+                {isLoading ? <FaSpinner className='animate-spin' /> : "sign in"}
               </button>
             </div>
           </form>
